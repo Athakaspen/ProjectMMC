@@ -1,0 +1,12 @@
+PROGRAMS USED:
+
+Godot 
+Piskel
+
+
+TUTORIALS:
+GDQuest
+GameFromScratch
+
+
+PLAYTESTERS:

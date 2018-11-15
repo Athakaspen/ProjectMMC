@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://Scripts/LazyKeyboardMovement.gd" type="Script" id=2]
+[ext_resource path="res://Scripts/LevelCamera.gd" type="Script" id=3]
+
+[node name="Temp_Player" type="Sprite"]
+
+visible = false
+position = Vector2( 145.168, 119.888 )
+z_index = 5
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+_sections_unfolded = [ "Z Index" ]
+__meta__ = {
+"_edit_group_": true
+}
+SPEED = 2
+
+[node name="Camera2" type="Camera2D" parent="." index="0"]
+
+position = Vector2( 30.8319, -7.88791 )
+anchor_mode = 1
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit_left = -10000000
+limit_top = 0
+limit_right = 10000000
+limit_bottom = 10000000
+limit_smoothed = true
+drag_margin_h_enabled = false
+drag_margin_v_enabled = false
+smoothing_enabled = true
+smoothing_speed = 20.0
+offset_v = 0.0
+offset_h = 0.0
+drag_margin_left = 0.0
+drag_margin_top = 0.0
+drag_margin_right = 0.0
+drag_margin_bottom = 0.0
+editor_draw_screen = true
+editor_draw_limits = false
+editor_draw_drag_margin = false
+script = ExtResource( 3 )
+_sections_unfolded = [ "Limit" ]
+CAMERA_WIDTH = 256
+
+

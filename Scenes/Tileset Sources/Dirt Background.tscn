@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Sprites/MMC Dirt Background.png" type="Texture" id=1]
+
+[node name="Dirt Background" type="Node2D"]
+
+[node name="BG1" type="Sprite" parent="." index="0"]
+
+position = Vector2( 47.236, 31.1292 )
+texture = ExtResource( 1 )
+_sections_unfolded = [ "Transform" ]
+
+
