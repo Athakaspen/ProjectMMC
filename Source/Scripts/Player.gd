@@ -1,38 +1,68 @@
 extends Node2D
 
-export var speed = 2
+enum MOVETYPE {DO, DONT, BUMP}
 
-func _ready():
-	pass
+enum CELLTYPE {EMPTY=-1, DIRT=0, GRASS=1, STONE=2, COAL=3, SILVER=4, GOLD=5}
+
+export var speedMult = 1.0
+
+onready var Grid = get_parent()
+
+#func _ready():
 
 func _process(delta):
-	if Input.is_action_pressed("moveUp"):
-		move_to(Vector2(position.x, position.y-32))
+	var moveDir = null
 	if Input.is_action_pressed("moveDown"):
-		move_to(Vector2(position.x, position.y+32))
-	if Input.is_action_pressed("moveRight"):
-		move_to(Vector2(position.x+32, position.y))
-	if Input.is_action_pressed("moveLeft"):
-		move_to(Vector2(position.x-32, position.y))
+		moveDir = Vector2(0,1)
+	elif Input.is_action_pressed("moveUp"):
+		moveDir = Vector2(0,-1)
+	elif Input.is_action_pressed("moveRight"):
+		moveDir = Vector2(1,0)
+	elif Input.is_action_pressed("moveLeft"):
+		moveDir = Vector2(-1,0)
+	
+	if moveDir != null:
+		var moveInfo = Grid.requestMove(self, moveDir)
+		# moveInfo = [moveType, moveLocation, speed]
+		var moveType = moveInfo[0]
+		
+		if moveType == DO:
+			updateLookDirection(moveDir)
+				# Move to new square
+			var movePos = moveInfo[1]
+			var speed = moveInfo[2]
+			move_to(movePos, speed)
+		elif moveType == BUMP:
+			updateLookDirection(moveDir)
+				# Stop movements and play animation
+			$AnimationPlayer.play("bump")
+			set_process(false)
+			yield($AnimationPlayer, "animation_finished")
+			set_process(true)
+		elif moveType == DONT:
+			pass
 
 
-func move_to(targetPosition):
+func move_to(targetPosition, speed = 2):
 	
 	set_process(false) # Disable user input while moving
 	
 	var moveRelativePos = (targetPosition-position) # Get relative Vector2 to add to position
 	
 	# setup tween (to move player sprite smoothly)
-	$Tween.interpolate_property($Point, "position", -moveRelativePos, Vector2(), 1/float(speed), Tween.TRANS_LINEAR, Tween.EASE_IN)
+	$Tween.interpolate_property($Point, "position", -moveRelativePos, Vector2(), 1/float(speed*speedMult), Tween.TRANS_LINEAR, Tween.EASE_IN)
 	
 	$Tween.start()
 	
 	position = targetPosition # Set new position
 	$Point.position = -moveRelativePos # Prevent glitchy flash before tween takes over to move sprite
-	updateLookDirection(moveRelativePos.normalized())
+	
+	#Grid.displayTileID(position)
+	print(Grid.world_to_map(position))
 	
 	yield($Tween, "tween_completed") # Wait until Tween finishes
 	
+	Grid.removeTile(self.position)
 	set_process(true) # Resume checking for input
 
 

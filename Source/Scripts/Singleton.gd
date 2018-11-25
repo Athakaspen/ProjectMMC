@@ -1,4 +1,5 @@
 extends Node
 
-func choose():
-	print("Called function 'choose()'")
+func choose(args):
+	return args[floor(randf()*args.size())]
+

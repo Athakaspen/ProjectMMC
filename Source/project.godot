@@ -16,7 +16,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Custom="*res://Scripts/Singleton.gd"
+Random="*res://Scenes/Subscenes/Singletons/Random.tscn"
 
 [display]
 

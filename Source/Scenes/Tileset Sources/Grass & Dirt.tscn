@@ -6,7 +6,6 @@
 
 [node name="Dirt" type="Sprite" parent="." index="0"]
 
-position = Vector2( 37.0633, 32.6742 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 32, 32 )
@@ -14,10 +13,42 @@ _sections_unfolded = [ "Region" ]
 
 [node name="Grass" type="Sprite" parent="." index="1"]
 
-position = Vector2( 73.6389, 33.1619 )
+position = Vector2( 64, 0 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 64, 0, 32, 32 )
+_sections_unfolded = [ "Region" ]
+
+[node name="Stone" type="Sprite" parent="." index="2"]
+
+position = Vector2( 128, 0 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 128, 0, 32, 32 )
+_sections_unfolded = [ "Region" ]
+
+[node name="Coal" type="Sprite" parent="." index="3"]
+
+position = Vector2( 0, 64 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 0, 64, 32, 32 )
+_sections_unfolded = [ "Region" ]
+
+[node name="Silver" type="Sprite" parent="." index="4"]
+
+position = Vector2( 64, 64 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 64, 64, 32, 32 )
+_sections_unfolded = [ "Region" ]
+
+[node name="Gold" type="Sprite" parent="." index="5"]
+
+position = Vector2( 128, 64 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 128, 64, 32, 32 )
 _sections_unfolded = [ "Region" ]
 
 
