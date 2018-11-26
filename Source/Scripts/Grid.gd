@@ -3,11 +3,32 @@ extends TileMap
 enum CELLTYPE {EMPTY=-1, DIRT=0, GRASS=1, STONE=2, COAL=3, SILVER=4, GOLD=5}
 enum MOVETYPE {DO, DONT, BUMP}
 
+var SpeedDict = {
+	EMPTY: 2.5,
+	DIRT: 1.8,
+	GRASS: 1.8,
+	STONE: 0,
+	COAL: 1,
+	SILVER: 1,
+	GOLD: 1
+}
+
+var OreDict = {
+	EMPTY: "none",
+	DIRT: "none",
+	GRASS: "none",
+	STONE: "none",
+	COAL: "coal",
+	SILVER: "silver",
+	GOLD: "gold"
+}
+
+
 # Vars for World Generation
 export var WorldSize = Vector2(5, 5)
 var TopHeight = 4
 
-var stoneFreq = 0.4
+var stoneFreq = 0.3
 var stoneMin = 2
 onready var stoneMax = 2*WorldSize.y
 
@@ -21,7 +42,7 @@ var silverMax = 30
 
 var goldFreq = 0.15
 var goldMin = 25
-var goldMax = 45
+var goldMax = 42
 
 func _ready():
 	# Random World Generation
@@ -41,27 +62,27 @@ func displayTileID(location):
 	print(get_cellv(world_to_map(location)))
 
 func requestMove(pawn, direction):
-	var cell_start = world_to_map(pawn.position)
-	var cell_target = cell_start + direction.normalized()
+	var cellStart = world_to_map(pawn.position)
+	var cellTarget = cellStart + direction.normalized()
 	
-	if (cell_target.y<3) || (cell_target.x<0) || (cell_target.x>WorldSize.x-1):
+	if (cellTarget.y<3) || (cellTarget.x<0) || (cellTarget.x>WorldSize.x-1):
 		#print("Your drill can't fly, sorry.")
 		return [MOVETYPE.DONT]
 	
-	var target_cell_id = get_cellv(cell_target)
-	match target_cell_id:
-		EMPTY:
-			return [MOVETYPE.DO, (map_to_world(cell_target) + cell_size/2), 2.5]
-		GRASS, DIRT:
-			return [MOVETYPE.DO, (map_to_world(cell_target) + cell_size/2), 1.6]
-		COAL, SILVER, GOLD:
-			return [MOVETYPE.DO, (map_to_world(cell_target) + cell_size/2), 1]
-		STONE:
-			#print("Cell contains stone.")
-			return [MOVETYPE.BUMP]
-
-func removeTile(tilePos):
+	var targetCellType = get_cellv(cellTarget)
+	
+	if targetCellType==STONE:
+		#print("Cell contains stone.")
+		return [MOVETYPE.BUMP]
+	else: 
+		return [MOVETYPE.DO, (map_to_world(cellTarget) + cell_size/2), SpeedDict[targetCellType]]
+	
+	
+# Destroy tile and return the ore that the player should recieve.
+func mineTile(tilePos):
+	var oreToReturn = OreDict[get_cellv(world_to_map(tilePos))]
 	set_cellv(world_to_map(tilePos), EMPTY)
+	return oreToReturn
 
 
 func generateWorld():
@@ -76,14 +97,13 @@ func generateWorld():
 			if col==0 || col==width-1 || curDepth==height-1:
 				set_cellv(Vector2(col,row), STONE) # Stone Borders
 			else:
-				set_cellv(Vector2(col,row), getTile(curDepth)) # Set tile using getTile() function
-			
+				set_cellv(Vector2(col,row), generateTile(curDepth)) # Set tile using getTile() function
 			
 			# Put background tile in
 			$"../BackGround".set_cellv(Vector2(col,row), 0)
 
 # Use random number generators to choose each tile for a given depth
-func getTile(depth):
+func generateTile(depth):
 	if depth==0:
 		return GRASS # Grass for the top layer
 	else:
@@ -102,14 +122,14 @@ func getTile(depth):
 			if randf()<=coalChance:
 				returnVal = COAL
 		
-		# silver Chance
+		# Silver Chance
 		if depth>=silverMin && depth<=silverMax:
 			var silverChance = (-abs(depth-(silverMin+silverMax)/2)/((silverMax-silverMin)/(2*silverFreq))+silverFreq)
 			print(silverChance)
 			if randf()<=silverChance:
 				returnVal = SILVER
 		
-		# gold Chance
+		# Gold Chance
 		if depth>=goldMin && depth<=goldMax:
 			var goldChance = (-abs(depth-(goldMin+goldMax)/2)/((goldMax-goldMin)/(2*goldFreq))+goldFreq)
 			print(goldChance)

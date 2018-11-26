@@ -1,6 +1,7 @@
 extends Camera2D
 
-export var CAMERA_WIDTH = 256
+export var VIEW_WIDTH = 8
+onready var CAMERA_WIDTH = 32*VIEW_WIDTH
 
 func _ready():
 	# Set Camera zoom
