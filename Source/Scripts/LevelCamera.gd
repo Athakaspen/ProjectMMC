@@ -9,8 +9,8 @@ func _ready():
 	self.zoom = Vector2(zoomWidth, zoomWidth)
 	self.limit_top = 0;
 	self.limit_left = 0;
-	self.limit_right = $"../../..".WorldSize.x*32
-	self.limit_bottom = ($"../../..".TopHeight + $"../../..".WorldSize.y) *32
+	self.limit_right = WorldGen.WorldSize.x*32
+	self.limit_bottom = (WorldGen.TopHeight + WorldGen.WorldSize.y) *32
 
 """
 # FOR DEBUGGING: Set camera zoom every frame

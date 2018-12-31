@@ -25,24 +25,9 @@ var OreDict = {
 
 
 # Vars for World Generation
-export var WorldSize = Vector2(5, 5)
-var TopHeight = 4
+var WorldSize = WorldGen.WorldSize
+var TopHeight = WorldGen.TopHeight
 
-var stoneFreq = 0.3
-var stoneMin = 2
-onready var stoneMax = 2*WorldSize.y
-
-var coalFreq = 0.15
-var coalMin = 2
-var coalMax = 20
-
-var silverFreq = 0.15
-var silverMin = 15
-var silverMax = 30
-
-var goldFreq = 0.15
-var goldMin = 25
-var goldMax = 42
 
 func _ready():
 	# Random World Generation
@@ -101,6 +86,8 @@ func generateWorld():
 			
 			# Put background tile in
 			$"../BackGround".set_cellv(Vector2(col,row), 0)
+	
+	print("World Generation Complete")
 
 # Use random number generators to choose each tile for a given depth
 func generateTile(depth):
@@ -109,30 +96,30 @@ func generateTile(depth):
 	else:
 		var returnVal = DIRT # Default is Dirt
 		# Stone Chance
-		if depth>=stoneMin && depth<=stoneMax:
-			var stoneChance = (-abs(depth-(stoneMin+stoneMax)/2)/((stoneMax-stoneMin)/(2*stoneFreq))+stoneFreq)
-			print(stoneChance)
+		if depth>=WorldGen.stoneMin && depth<=WorldGen.stoneMax:
+			var stoneChance = (-abs(depth-(WorldGen.stoneMin+WorldGen.stoneMax)/2)/((WorldGen.stoneMax-WorldGen.stoneMin)/(2*WorldGen.stoneFreq))+WorldGen.stoneFreq)
+			#print(stoneChance)
 			if randf()<=stoneChance:
 				returnVal = STONE
 		
 		# Coal Chance
-		if depth>=coalMin && depth<=coalMax:
-			var coalChance = (-abs(depth-(coalMin+coalMax)/2)/((coalMax-coalMin)/(2*coalFreq))+coalFreq)
-			print(coalChance)
+		if depth>=WorldGen.coalMin && depth<=WorldGen.coalMax:
+			var coalChance = (-abs(depth-(WorldGen.coalMin+WorldGen.coalMax)/2)/((WorldGen.coalMax-WorldGen.coalMin)/(2*WorldGen.coalFreq))+WorldGen.coalFreq)
+			#print(coalChance)
 			if randf()<=coalChance:
 				returnVal = COAL
 		
 		# Silver Chance
-		if depth>=silverMin && depth<=silverMax:
-			var silverChance = (-abs(depth-(silverMin+silverMax)/2)/((silverMax-silverMin)/(2*silverFreq))+silverFreq)
-			print(silverChance)
+		if depth>=WorldGen.silverMin && depth<=WorldGen.silverMax:
+			var silverChance = (-abs(depth-(WorldGen.silverMin+WorldGen.silverMax)/2)/((WorldGen.silverMax-WorldGen.silverMin)/(2*WorldGen.silverFreq))+WorldGen.silverFreq)
+			#print(silverChance)
 			if randf()<=silverChance:
 				returnVal = SILVER
 		
 		# Gold Chance
-		if depth>=goldMin && depth<=goldMax:
-			var goldChance = (-abs(depth-(goldMin+goldMax)/2)/((goldMax-goldMin)/(2*goldFreq))+goldFreq)
-			print(goldChance)
+		if depth>=WorldGen.goldMin && depth<=WorldGen.goldMax:
+			var goldChance = (-abs(depth-(WorldGen.goldMin+WorldGen.goldMax)/2)/((WorldGen.goldMax-WorldGen.goldMin)/(2*WorldGen.goldFreq))+WorldGen.goldFreq)
+			#print(goldChance)
 			if randf()<=goldChance:
 				returnVal = GOLD
 

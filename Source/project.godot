@@ -11,12 +11,14 @@ config_version=3
 [application]
 
 config/name="Project MMC"
-run/main_scene="res://Scenes/Level.tscn"
+run/main_scene="res://Scenes/Menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-Random="*res://Scenes/Subscenes/Singletons/Random.tscn"
+WorldGen="*res://Singletons/WorldGen.gd"
+PlayerInventory="*res://Singletons/PlayerInventory.gd"
+Random="*res://Singletons/Random.gd"
 
 [display]
 

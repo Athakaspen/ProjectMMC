@@ -52,10 +52,10 @@ func _process(delta):
 		match moveType:
 			DO:
 				updateLookDirection(moveDir)
-					# Move to new square
+				# Move to new square
 				var movePos = moveInfo[1]
 				var speed = moveInfo[2]
-				print(Inventory)
+				#print(Inventory)
 				move_to(movePos, speed)
 			BUMP:
 				updateLookDirection(moveDir)
@@ -74,13 +74,13 @@ func move_to(targetPosition, speed = 2):
 	
 	var moveRelativePos = (targetPosition-position) # Get relative Vector2 to add to position
 	
+	$Point.position = -moveRelativePos # Prevent glitchy flash before tween takes over to move sprite
+	position = targetPosition # Set new position
+	
 	# setup tween (to move player sprite smoothly)
 	$Tween.interpolate_property($Point, "position", -moveRelativePos, Vector2(), 1/float(speed*speedMult), Tween.TRANS_LINEAR, Tween.EASE_IN)
 	
 	$Tween.start()
-	
-	position = targetPosition # Set new position
-	$Point.position = -moveRelativePos # Prevent glitchy flash before tween takes over to move sprite
 	
 	#Grid.displayTileID(position)
 	#print(Grid.world_to_map(self.position))
@@ -105,13 +105,27 @@ func updateLookDirection(lookDir):
 		else: $Point/Sprite.texture = load("res://Sprites/Drill/Drill_Up.png")
 
 func updateUILabel():
-		var coalLabel = get_node("../../CanvasLayer/UI/MarginContainer/VBoxContainer/Coal")
+		var coalLabel = get_node("../../CanvasLayer/UI/MarginContainer/HBoxContainer/VBoxContainer/Coal")
 		coalLabel.text = "Coal: " + str(Inventory["coal"])
 		
-		var silverLabel = get_node("../../CanvasLayer/UI/MarginContainer/VBoxContainer/Silver")
+		var silverLabel = get_node("../../CanvasLayer/UI/MarginContainer/HBoxContainer/VBoxContainer/Silver")
 		silverLabel.text = "Silver: " + str(Inventory["silver"])
 		
-		var goldLabel = get_node("../../CanvasLayer/UI/MarginContainer/VBoxContainer/Gold")
+		var goldLabel = get_node("../../CanvasLayer/UI/MarginContainer/HBoxContainer/VBoxContainer/Gold")
 		goldLabel.text = "Gold: " + str(Inventory["gold"])
+
+
+
+
+func _on_backtomenu(): # Triggered by button signal
+	
+	# Add current inventory to global values
+	PlayerInventory.Coal += Inventory["coal"]
+	PlayerInventory.Silver += Inventory["silver"]
+	PlayerInventory.Gold += Inventory["gold"]
+	# Change scene
+	get_tree().change_scene("res://Scenes/Menu.tscn")
+
+
 
 
